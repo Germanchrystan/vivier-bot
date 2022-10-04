@@ -1,4 +1,4 @@
-package notes
+package writer
 
 type accidentalCase int
 
@@ -55,7 +55,7 @@ func GetAccidental(accidental accidentalCase) Accidental {
 	}
 }
 
-var notesArray = []Note{
+var NotesCatalog = []Note{
 	{noteNumber: 3, octave: 2, step: "C", freq: 65.406, accidental: GetAccidental(natural)},
 	{noteNumber: 4, octave: 2, step: "C", freq: 67.323, accidental: GetAccidental(quarterSharp)},
 	{noteNumber: 5, octave: 2, step: "C", freq: 69.296, accidental: GetAccidental(sharp)},
