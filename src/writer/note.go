@@ -6,7 +6,7 @@ import (
 	"github.com/Germanchrystan/vivier-forest/src/composer"
 )
 
-func generateNote(note composer.Note, isFirstChordNote bool) string {
+func engraveNote(note composer.Note, isFirstChordNote bool) string {
 	var chordTag string
 	if isFirstChordNote {
 		chordTag = "<chord/>"
