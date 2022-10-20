@@ -1,56 +1,50 @@
 package composer
 
 import (
-	"math/rand"
-	"time"
-
 	"github.com/wesovilabs/koazee"
 )
 
-type Coordinate [2]int
+type Vector [2]int
 
 type Chord struct {
-	Coors []Coordinate
-	Notes []Note
+	BaseNotes [2]Note
+	Color     []Vector
+	Notes     []Note
 }
 
-func newChord(coors []Coordinate, xNote, yNote Note) Chord {
+// Create a slice of Vectors for chords. Using koazee lib to use "contains" method
+func NewColor(vectorPoints, vectorQuantity int) []Vector {
+	var color []Vector
+	stream := koazee.StreamOf(color)
+
+	for len(color) != vectorQuantity {
+		max := getRandomIntBetweenRanges(2, vectorPoints)
+		coor := NewVector(max)
+		contains, _ := stream.Contains(coor)
+		if !contains {
+			color = append(color, coor)
+			stream = koazee.StreamOf(color)
+		}
+	}
+	return color
+}
+
+// Generates a random coord, using a num argument as the sum of both numbers
+func NewVector(num int) Vector {
+	partition := getRandomIntBetweenRanges(1, num)
+	return Vector{partition, num - partition}
+}
+
+func NewChord(color []Vector, baseNotes [2]Note) Chord {
 	var notes []Note
-	for _, coor := range coors {
-		freq := xNote.Freq*float32(coor[0]) + yNote.Freq*float32(coor[1])
+	for _, v := range color {
+		freq := baseNotes[0].Freq*float32(v[0]) + baseNotes[1].Freq*float32(v[1])
 		note := FindNearestNote(freq, NotesCatalog)
 		notes = append(notes, note)
 	}
 	return Chord{
-		Coors: coors,
-		Notes: notes,
+		BaseNotes: baseNotes,
+		Color:     color,
+		Notes:     notes,
 	}
-}
-
-// Create a slice of Vectors for chords. Using koazee lib to use "contains" method
-func NewChordVectors(num int) []Coordinate {
-	var coors []Coordinate
-	stream := koazee.StreamOf(coors)
-	for len(coors) != num {
-		max := getRandomIntBetweenRanges(num, 2)
-		coor := NewCoord(max)
-		contains, _ := stream.Contains(coor)
-		if !contains {
-			coors = append(coors, coor)
-			stream = koazee.StreamOf(coors)
-		}
-	}
-	return coors
-}
-
-// Generates a random coord, using a num argument as the sum of both numbers
-func NewCoord(num int) Coordinate {
-	partition := getRandomIntBetweenRanges(num, 1)
-	return Coordinate{partition, num - partition}
-}
-
-// Get a random number between to values
-func getRandomIntBetweenRanges(max, min int) int {
-	rand.Seed(time.Now().UTC().UnixNano())
-	return rand.Intn((max)-min) + min
 }

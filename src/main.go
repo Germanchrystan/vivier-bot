@@ -7,10 +7,13 @@ import (
 )
 
 func main() {
-	// tree := tree.NewTree(7, 2, 2, 2)
+	/* tree := tree.NewTree(7, 2, 2, 2)
 	// fmt.Println(tree.GetTraversedTree())
-	coords := composer.NewChordVectors(6)
 
+	coords := composer.CreateHLBaseNotes()
 	fmt.Println(coords)
+	*/
 
+	prog := composer.CreateChordSet(3, 3)
+	fmt.Println(prog)
 }
