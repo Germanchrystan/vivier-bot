@@ -11,7 +11,7 @@ func engraveChord(chord composer.Chord) (baseNotes, upperNotes string) {
 		engraveNotes(chord.Notes) // Upper notes
 }
 
-func engraveProgression(progression []composer.Chord) (basePart, upperPart string) {
+func engraveProgression(progression []composer.Chord) (string, string) {
 	var basePart, upperPart string
 	measure := 1
 	for index, chord := range progression {
@@ -24,6 +24,10 @@ func engraveProgression(progression []composer.Chord) (basePart, upperPart strin
 		} else {
 			measureSeparator = ""
 		}
-		
+		bp, up := engraveChord(chord)
+		basePart += measureSeparator + bp
+		upperPart += measureSeparator + up
+
 	}
+	return basePart, upperPart
 }

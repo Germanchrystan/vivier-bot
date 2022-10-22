@@ -9,7 +9,7 @@ func CreateColorSet(colorSetLength int) (uniqueColor []Vector, colorPossibilitie
 	uniqueColor = NewColor(9, 5)
 	var colors [][]Vector
 	for len(colors) < colorSetLength-1 {
-		randomVectorPoints := getRandomIntBetweenRanges(2, 8)
+		randomVectorPoints := getRandomIntBetweenRanges(3, 7)
 		randomVectorQuantity := getRandomIntBetweenRanges(2, 4)
 		newColor := NewColor(randomVectorPoints, randomVectorQuantity)
 		colors = append(colors, newColor)

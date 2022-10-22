@@ -1,6 +1,6 @@
 module github.com/Germanchrystan/vivier-forest
 
-go 1.18
+go 1.19
 
 require github.com/wesovilabs/koazee v0.0.5
 
