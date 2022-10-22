@@ -1,9 +1,5 @@
 package composer
 
-import (
-	"github.com/wesovilabs/koazee"
-)
-
 type Vector [2]int
 
 type Chord struct {
@@ -15,16 +11,21 @@ type Chord struct {
 // Create a slice of Vectors for chords. Using koazee lib to use "contains" method
 func NewColor(vectorPoints, vectorQuantity int) []Vector {
 	var color []Vector
-	stream := koazee.StreamOf(color)
+	//stream := koazee.StreamOf(color)
 
 	for len(color) != vectorQuantity {
 		max := getRandomIntBetweenRanges(2, vectorPoints)
 		coor := NewVector(max)
-		contains, _ := stream.Contains(coor)
-		if !contains {
-			color = append(color, coor)
-			stream = koazee.StreamOf(color)
-		}
+		// contains, _ := stream.Contains(coor)
+		// if !contains {
+		// 	fmt.Println("REPEATED COLOR")
+		color = append(color, coor)
+		// 	stream = koazee.StreamOf(color)
+		// }
+		/*
+			Commenting this since it generates infinite loop sometimes.
+			I should add/remove points randomly if a color is repeated
+		*/
 	}
 	return color
 }

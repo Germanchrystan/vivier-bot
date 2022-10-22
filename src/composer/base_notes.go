@@ -39,6 +39,7 @@ func createIntervalHierarchy() []wr.Choice {
 		newInt := getRandomIntBetweenRanges(1, 6)
 		contains, _ := stream.Contains(newInt)
 		if !contains {
+			// fmt.Println("REPEATED INTERVAL")
 			intervalNumbers = append(intervalNumbers, newInt)
 
 			baseNoteMovements = append(
