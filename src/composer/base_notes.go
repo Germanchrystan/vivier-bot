@@ -1,6 +1,7 @@
 package composer
 
 import (
+	"math"
 	"math/rand"
 	"time"
 
@@ -53,13 +54,6 @@ func createIntervalHierarchy() []wr.Choice {
 	return CreateChoices(baseNoteMovements)
 }
 
-func isSameNote(note1, note2 Note) bool {
-	if note1.Step == note2.Step && note1.Accidental == note2.Accidental {
-		return true
-	}
-	return false
-}
-
 func CreateHLBaseNotes() [2]Note {
 	var result [2]Note
 	bassNote := getRandomNoteBetweenRange(0, 7, BassNoteCatalog)
@@ -72,7 +66,6 @@ func CreateHLBaseNotes() [2]Note {
 func createFollowingBaseNotes(prevBaseNotes [2]Note, chooser *wr.Chooser) [2]Note {
 	rand.Seed(time.Now().UTC().UnixNano())
 
-	var result [2]Note
 	noteMovement := chooser.Pick().(baseNoteMovement)                    // Pick base note movement
 	interval := int(noteMovement.Interval) * int(noteMovement.Direction) // get int from baseNoteMovement struct
 
@@ -80,24 +73,31 @@ func createFollowingBaseNotes(prevBaseNotes [2]Note, chooser *wr.Chooser) [2]Not
 
 	if randomIndex == 0 {
 		isValid, newNoteIndex := isValidNoteMovement(BassNoteCatalog, prevBaseNotes[0], interval)
-		if isValid && !isSameNote(BassNoteCatalog[newNoteIndex], prevBaseNotes[1]) {
+		if isValid &&
+			!isSameNote(BassNoteCatalog[newNoteIndex], prevBaseNotes[1]) &&
+			!isNoteTooClose(BassNoteCatalog[newNoteIndex], prevBaseNotes[1]) {
 			return [2]Note{BassNoteCatalog[newNoteIndex], prevBaseNotes[1]}
-		} else if isValid, newNoteIndex = isValidNoteMovement(CelloNoteCatalog, prevBaseNotes[1], interval); isValid && !isSameNote(prevBaseNotes[0], CelloNoteCatalog[newNoteIndex]) {
+		} else if isValid, newNoteIndex = isValidNoteMovement(CelloNoteCatalog, prevBaseNotes[1], interval); isValid &&
+			!isSameNote(prevBaseNotes[0], CelloNoteCatalog[newNoteIndex]) &&
+			!isNoteTooClose(prevBaseNotes[0], CelloNoteCatalog[newNoteIndex]) {
 			return [2]Note{prevBaseNotes[0], CelloNoteCatalog[newNoteIndex]}
 		} else {
 			return createFollowingBaseNotes(prevBaseNotes, chooser)
 		}
 	} else {
 		isValid, newNoteIndex := isValidNoteMovement(CelloNoteCatalog, prevBaseNotes[1], interval)
-		if isValid && !isSameNote(prevBaseNotes[0], CelloNoteCatalog[newNoteIndex]) {
+		if isValid &&
+			!isSameNote(prevBaseNotes[0], CelloNoteCatalog[newNoteIndex]) &&
+			!isNoteTooClose(prevBaseNotes[0], CelloNoteCatalog[newNoteIndex]) {
 			return [2]Note{prevBaseNotes[0], CelloNoteCatalog[newNoteIndex]}
-		} else if isValid, newNoteIndex = isValidNoteMovement(BassNoteCatalog, prevBaseNotes[0], interval); isValid && !isSameNote(BassNoteCatalog[newNoteIndex], prevBaseNotes[1]) {
+		} else if isValid, newNoteIndex = isValidNoteMovement(BassNoteCatalog, prevBaseNotes[0], interval); isValid &&
+			!isSameNote(BassNoteCatalog[newNoteIndex], prevBaseNotes[1]) &&
+			!isNoteTooClose(BassNoteCatalog[newNoteIndex], prevBaseNotes[1]) {
 			return [2]Note{BassNoteCatalog[newNoteIndex], prevBaseNotes[1]}
 		} else {
 			return createFollowingBaseNotes(prevBaseNotes, chooser)
 		}
 	}
-	return result
 }
 
 func isValidNoteMovement(noteCatalog []Note, note Note, newInterval int) (bool, int) {
@@ -114,6 +114,21 @@ func isValidNoteMovement(noteCatalog []Note, note Note, newInterval int) (bool, 
 	}
 
 	return false, newIntervalIndex
+}
+
+func isSameNote(note1, note2 Note) bool {
+	if note1.Step == note2.Step && note1.Accidental == note2.Accidental {
+		return true
+	}
+	return false
+}
+
+func isNoteTooClose(note1, note2 Note) bool {
+	distanceBetweenNotes := int(math.Abs(float64(note2.NoteNumber - note1.NoteNumber)))
+	if distanceBetweenNotes < 14 {
+		return true
+	}
+	return false
 }
 
 func getRandomNoteBetweenRange(min, max int, catalog []Note) Note {
