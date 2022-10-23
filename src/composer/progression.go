@@ -10,7 +10,7 @@ func CreateColorSet(colorSetLength int) (uniqueColor []Vector, colorPossibilitie
 	var colors [][]Vector
 	for len(colors) < colorSetLength-1 {
 		randomVectorPoints := getRandomIntBetweenRanges(3, 7)
-		randomVectorQuantity := getRandomIntBetweenRanges(2, 4)
+		randomVectorQuantity := getRandomIntBetweenRanges(3, 6)
 		newColor := NewColor(randomVectorPoints, randomVectorQuantity)
 		colors = append(colors, newColor)
 	}
@@ -22,7 +22,7 @@ func CreateChordSet(chordSetlength, colorSetLength int) []Chord {
 	baseNotes := CreateBaseNoteProgression(chordSetlength)
 
 	uniqueColor, colors := CreateColorSet(colorSetLength)
-	choices := CreateChoices[[]Vector](colors)
+	choices := CreateChoices(colors)
 	chooser, err := CreateNewChooser(choices)
 	if err != nil {
 		panic(err)
@@ -37,7 +37,7 @@ func CreateChordSet(chordSetlength, colorSetLength int) []Chord {
 			color = chooser.Pick().([]Vector)
 		}
 		newChord := NewChord(color, bn)
-		result = append(result, newChord)
+		result = append([]Chord{newChord}, result...)
 	}
 	return result
 }
