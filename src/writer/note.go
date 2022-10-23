@@ -9,10 +9,10 @@ import (
 func engraveNote(note composer.Note, isFirstChordNote bool) string {
 	var chordTag string
 	if !isFirstChordNote {
-		chordTag = "<chord/>"
+		chordTag = "\n<chord/>"
 	}
 	accidental := composer.GetAccidental(note.Accidental)
-	return fmt.Sprintf("<note>%s\n<pitch>\n<step>%s</step>\n<alter>%f</alter>\n<octave>%d</octave>\n</pitch>\n<duration>1</duration>\n<voice>1</voice><type>quarter</type><accidental>%s</accidental><stem>up</stem></note>",
+	return fmt.Sprintf("<note>%s\n<pitch>\n<step>%s</step>\n<alter>%f</alter>\n<octave>%d</octave>\n</pitch>\n<duration>1</duration>\n<voice>1</voice>\n<type>quarter</type>\n<accidental>%s</accidental>\n<stem>up</stem>\n</note>\n",
 		chordTag,
 		note.Step,
 		accidental.Alter,
