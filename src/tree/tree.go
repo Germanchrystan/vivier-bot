@@ -7,14 +7,18 @@ type Tree struct {
 	scale           int
 	indexLimitLeft  int
 	indexLimitRight int
+	left            *Tree
+	right           *Tree
 }
 
 func NewTree(rootIndex, scale, indexLimitLeft, indexLimitRight int) *Tree {
 	tree := &Tree{
 		scale:           scale,
-		root:            newNode(rootIndex),
+		root:            NewNode(rootIndex),
 		indexLimitLeft:  indexLimitLeft,
 		indexLimitRight: indexLimitRight,
+		left:            nil,
+		right:           nil,
 	}
 
 	mayKeepTraversing := true
