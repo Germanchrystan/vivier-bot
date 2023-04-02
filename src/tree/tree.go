@@ -7,19 +7,24 @@ type Tree struct {
 	scale           int
 	indexLimitLeft  int
 	indexLimitRight int
+	left            *Tree
+	right           *Tree
 }
 
 func NewTree(rootIndex, scale, indexLimitLeft, indexLimitRight int) *Tree {
 	tree := &Tree{
 		scale:           scale,
-		root:            newNode(rootIndex),
+		root:            NewNode(rootIndex),
 		indexLimitLeft:  indexLimitLeft,
 		indexLimitRight: indexLimitRight,
+		left:            nil,
+		right:           nil,
 	}
 
-	mayKeepTraversing := true
-	for mayKeepTraversing {
-		mayKeepTraversing = tree.root.Populate(scale, indexLimitLeft, indexLimitRight)
+	i := rootIndex
+	for i >= indexLimitLeft || i >= indexLimitRight {
+		tree.root.Populate(scale, indexLimitLeft, indexLimitRight)
+		i -= scale
 	}
 
 	return tree
