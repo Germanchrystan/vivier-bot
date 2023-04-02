@@ -21,9 +21,10 @@ func NewTree(rootIndex, scale, indexLimitLeft, indexLimitRight int) *Tree {
 		right:           nil,
 	}
 
-	mayKeepTraversing := true
-	for mayKeepTraversing {
-		mayKeepTraversing = tree.root.Populate(scale, indexLimitLeft, indexLimitRight)
+	i := rootIndex
+	for i >= indexLimitLeft || i >= indexLimitRight {
+		tree.root.Populate(scale, indexLimitLeft, indexLimitRight)
+		i -= scale
 	}
 
 	return tree
